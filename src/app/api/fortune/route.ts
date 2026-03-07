@@ -4,7 +4,7 @@ const AI_API_KEY = process.env.OPENAI_API_KEY;
 const AI_API_URL = process.env.OPENAI_API_URL || 'https://api.openai.com/v1/chat/completions';
 
 // 使用更强的模型
-const MODEL = 'gpt-4-turbo-preview'; // 或 'gpt-4'，视 API 支持而定
+const MODEL = 'gpt-4';
 
 export async function POST(request: NextRequest) {
   try {
