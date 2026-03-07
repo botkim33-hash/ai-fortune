@@ -5,8 +5,10 @@ export interface BaZiInput {
   month: number;
   day: number;
   hour: number; // 0-23，-1 表示不知道时辰
+  minute?: number; // 0-59，精确到分钟
   gender: 'male' | 'female';
   name?: string; // 可选的名字
+  birthPlace?: string; // 出生地（用于真太阳时校正）
 }
 
 export interface BaZiResult {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { BaZiInput, FortuneFormData } from '@/types/fortune';
-import { User, Heart, ArrowRight, Loader2 } from 'lucide-react';
+import { User, Heart, ArrowRight, Loader2, Clock } from 'lucide-react';
 import FortuneResult from './FortuneResult';
 
 type Step = 'type' | 'person1' | 'person2' | 'result';
@@ -12,10 +12,11 @@ export default function FortuneForm() {
   const [formData, setFormData] = useState<FortuneFormData>({
     readingType: 'single',
     person1: {
-      year: new Date().getFullYear() - 25,
-      month: 1,
-      day: 1,
+      year: 1995,
+      month: 6,
+      day: 15,
       hour: 12,
+      minute: 0,
       gender: 'male',
     },
   });
@@ -78,7 +79,7 @@ export default function FortuneForm() {
               <User className="w-8 h-8 text-gold" />
             </div>
             <h3 className="text-xl font-bold text-white mb-2">个人命盘</h3>
-            <p className="text-text-secondary">详细分析你的八字命格、运势走向</p>
+            <p className="text-text-secondary">详细分析你的八字命格、大运流年、运势走向</p>
           </button>
 
           <button
@@ -89,7 +90,7 @@ export default function FortuneForm() {
               <Heart className="w-8 h-8 text-purple" />
             </div>
             <h3 className="text-xl font-bold text-white mb-2">双人合盘</h3>
-            <p className="text-text-secondary">分析两人配对、姻缘、合作潜力</p>
+            <p className="text-text-secondary">分析两人配对、姻缘、八字互补、合作潜力</p>
           </button>
         </div>
       </div>
@@ -101,7 +102,7 @@ export default function FortuneForm() {
     return (
       <div className="max-w-xl mx-auto">
         <h2 className="text-2xl font-bold text-center text-white mb-8">
-          填写你的生辰信息
+          填写生辰信息（精确到分钟）
         </h2>
         
         <form onSubmit={handlePerson1Submit} className="glass rounded-2xl p-8">
@@ -135,7 +136,7 @@ export default function FortuneForm() {
         
         <form onSubmit={handlePerson2Submit} className="glass rounded-2xl p-8">
           <BirthForm
-            data={formData.person2 || { year: 1995, month: 1, day: 1, hour: 12, gender: 'female' }}
+            data={formData.person2 || { year: 1995, month: 6, day: 15, hour: 12, minute: 0, gender: 'female' }}
             onChange={(data) => setFormData(prev => ({ ...prev, person2: data }))}
           />
           
@@ -180,10 +181,19 @@ function BirthForm({
   data: BaZiInput; 
   onChange: (data: BaZiInput) => void;
 }) {
-  const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+  // 生成年份选项（1900-今年）
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  
+  // 根据年月获取天数
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month, 0).getDate();
+  };
+  const days = Array.from({ length: getDaysInMonth(data.year, data.month) }, (_, i) => i + 1);
+  
   const hours = Array.from({ length: 24 }, (_, i) => i);
+  const minutes = Array.from({ length: 60 }, (_, i) => i);
 
   return (
     <div className="space-y-6">
@@ -194,7 +204,7 @@ function BirthForm({
           type="text"
           value={data.name || ''}
           onChange={(e) => onChange({ ...data, name: e.target.value })}
-          className="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border text-white placeholder-text-muted focus:border-gold focus:outline-none"
+          className="w-full px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white placeholder:text-gray-500 focus:border-[#d4af37] focus:outline-none"
           placeholder="输入姓名"
         />
       </div>
@@ -223,60 +233,92 @@ function BirthForm({
         </div>
       </div>
 
-      {/* 出生年月日时 */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm text-text-secondary mb-2">出生年份</label>
+      {/* 出生日期 */}
+      <div>
+        <label className="block text-sm text-text-secondary mb-2">出生日期（公历）</label>
+        <div className="grid grid-cols-3 gap-3">
           <select
             value={data.year}
             onChange={(e) => onChange({ ...data, year: parseInt(e.target.value) })}
-            className="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border text-white focus:border-gold focus:outline-none"
+            className="px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white focus:border-[#d4af37] focus:outline-none"
           >
             {years.map((y) => (
               <option key={y} value={y}>{y}年</option>
             ))}
           </select>
-        </div>
 
-        <div>
-          <label className="block text-sm text-text-secondary mb-2">月份</label>
           <select
             value={data.month}
             onChange={(e) => onChange({ ...data, month: parseInt(e.target.value) })}
-            className="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border text-white focus:border-gold focus:outline-none"
+            className="px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white focus:border-[#d4af37] focus:outline-none"
           >
             {months.map((m) => (
               <option key={m} value={m}>{m}月</option>
             ))}
           </select>
-        </div>
 
-        <div>
-          <label className="block text-sm text-text-secondary mb-2">日期</label>
           <select
             value={data.day}
             onChange={(e) => onChange({ ...data, day: parseInt(e.target.value) })}
-            className="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border text-white focus:border-gold focus:outline-none"
+            className="px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white focus:border-[#d4af37] focus:outline-none"
           >
             {days.map((d) => (
               <option key={d} value={d}>{d}日</option>
             ))}
           </select>
         </div>
+      </div>
 
-        <div>
-          <label className="block text-sm text-text-secondary mb-2">时辰（可选）</label>
+      {/* 出生时间（精确到分钟） */}
+      <div>
+        <label className="block text-sm text-text-secondary mb-2 flex items-center gap-2">
+          <Clock className="w-4 h-4" />
+          出生时间（精确到分钟）
+        </label>
+        <div className="grid grid-cols-3 gap-3">
           <select
             value={data.hour}
             onChange={(e) => onChange({ ...data, hour: parseInt(e.target.value) })}
-            className="w-full px-4 py-3 rounded-xl bg-bg-tertiary border border-border text-white focus:border-gold focus:outline-none"
+            className="px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white focus:border-[#d4af37] focus:outline-none"
           >
             <option value={-1}>不清楚</option>
             {hours.map((h) => (
-              <option key={h} value={h}>{h}:00</option>
+              <option key={h} value={h}>{h.toString().padStart(2, '0')}时</option>
             ))}
           </select>
+
+          <select
+            value={data.minute || 0}
+            onChange={(e) => onChange({ ...data, minute: parseInt(e.target.value) })}
+            disabled={data.hour < 0}
+            className="px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white focus:border-[#d4af37] focus:outline-none disabled:opacity-50"
+          >
+            {minutes.map((m) => (
+              <option key={m} value={m}>{m.toString().padStart(2, '0')}分</option>
+            ))}
+          </select>
+
+          <div className="flex items-center justify-center text-text-muted text-sm">
+            {data.hour >= 0 ? 
+              `${data.hour.toString().padStart(2, '0')}:${(data.minute || 0).toString().padStart(2, '0')}` : 
+              '时辰未知'}
+          </div>
         </div>
+        <p className="text-xs text-text-muted mt-2">
+          * 时间越精确，八字排盘越准确。不确定可选择最接近的时间。
+        </p>
+      </div>
+
+      {/* 出生地（可选，用于真太阳时校正） */}
+      <div>
+        <label className="block text-sm text-text-secondary mb-2">出生地（可选，用于真太阳时校正）</label>
+        <input
+          type="text"
+          value={data.birthPlace || ''}
+          onChange={(e) => onChange({ ...data, birthPlace: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl bg-[#1a1a25] border border-[rgba(212,175,55,0.2)] text-white placeholder:text-gray-500 focus:border-[#d4af37] focus:outline-none"
+          placeholder="例如：北京市"
+        />
       </div>
     </div>
   );
