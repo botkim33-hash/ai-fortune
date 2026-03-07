@@ -86,7 +86,7 @@ ${baziStr}
         success: true,
         data: {
           baZi: bazi,
-          baZiStr,
+          baZiStr: baziStr,
           fiveElements: elements,
           rawResponse: aiResponse,
         },
