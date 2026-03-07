@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 const AI_API_KEY = process.env.OPENAI_API_KEY;
 const AI_API_URL = process.env.OPENAI_API_URL || 'https://api.openai.com/v1/chat/completions';
 
-// 使用更强的模型
-const MODEL = 'gpt-4';
+// 使用模型
+const MODEL = 'gpt-3.5-turbo';
 
 export async function POST(request: NextRequest) {
   try {
