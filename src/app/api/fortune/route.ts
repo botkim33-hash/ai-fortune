@@ -4,7 +4,7 @@ const AI_API_KEY = process.env.OPENAI_API_KEY;
 const AI_API_URL = process.env.OPENAI_API_URL || 'https://api.openai.com/v1/chat/completions';
 
 // 使用模型
-const MODEL = 'gpt-3.5-turbo';
+const MODEL = 'gpt-4-turbo';
 
 export async function POST(request: NextRequest) {
   try {
