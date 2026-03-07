@@ -1,73 +1,57 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  /* 主色调 - 国风深色 */
-  --color-bg-primary: #0a0a0f;
-  --color-bg-secondary: #12121a;
-  --color-bg-tertiary: #1a1a25;
+@layer base {
+  :root {
+    --color-bg-primary: #0a0a0f;
+    --color-bg-secondary: #12121a;
+    --color-bg-tertiary: #1a1a25;
+    --color-gold: #d4af37;
+    --color-gold-light: #f4d03f;
+    --color-gold-dark: #b8960c;
+    --color-jade: #00a86b;
+    --color-crimson: #dc143c;
+    --color-purple: #8b5cf6;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a0a0b0;
+    --color-text-muted: #606070;
+    --color-border: rgba(212, 175, 55, 0.2);
+  }
   
-  /* 强调色 - 金色系 */
-  --color-gold: #d4af37;
-  --color-gold-light: #f4d03f;
-  --color-gold-dark: #b8960c;
+  body {
+    @apply bg-[#0a0a0f] text-white antialiased;
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-[#12121a]/80 backdrop-blur-xl border border-[rgba(212,175,55,0.2)];
+  }
   
-  /* 辅助色 */
-  --color-jade: #00a86b;
-  --color-crimson: #dc143c;
-  --color-purple: #8b5cf6;
+  .text-gold-gradient {
+    @apply bg-gradient-to-r from-[#d4af37] via-[#f4d03f] to-[#d4af37] bg-clip-text text-transparent;
+  }
   
-  /* 文字 */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a0a0b0;
-  --color-text-muted: #606070;
+  .bg-stars {
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(212,175,55,0.3), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.2), transparent),
+      radial-gradient(2px 2px at 160px 120px, rgba(212,175,55,0.2), transparent);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
   
-  /* 边框 */
-  --color-border: rgba(212, 175, 55, 0.2);
-  --color-border-glow: rgba(212, 175, 55, 0.4);
-  
-  /* 字体 */
-  --font-display: "Noto Serif SC", serif;
-  --font-body: "Inter", "Noto Sans SC", sans-serif;
-}
-
-/* 自定义动画 */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
-}
-
-@keyframes pulse-gold {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-/* 玻璃态效果 */
-.glass {
-  background: rgba(18, 18, 26, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border);
-}
-
-/* 金色渐变文字 */
-.text-gold-gradient {
-  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* 星光背景 */
-.bg-stars {
-  background-image: 
-    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(212,175,55,0.3), transparent),
-    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.2), transparent),
-    radial-gradient(2px 2px at 160px 120px, rgba(212,175,55,0.2), transparent);
-  background-repeat: repeat;
-  background-size: 200px 200px;
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 }
