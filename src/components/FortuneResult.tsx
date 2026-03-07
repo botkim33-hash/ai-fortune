@@ -77,7 +77,7 @@ export default function FortuneResult({ result, type, onReset }: FortuneResultPr
           <div className="mt-8 pt-6 border-t border-border">
             <p className="text-sm text-text-secondary mb-4">五行分布</p>
             <div className="flex justify-center gap-6">
-              {Object.entries(result.fiveElements).map(([element, count]: [string, number]) => {
+              {(Object.entries(result.fiveElements) as [string, number][]).map(([element, count]) => {
                 const labels: Record<string, string> = {
                   wood: '木', fire: '火', earth: '土', metal: '金', water: '水'
                 };
