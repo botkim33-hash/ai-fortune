@@ -45,7 +45,8 @@ export default function FortuneForm() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/fortune', {
+      // 使用新的 fortune-v2 API
+      const response = await fetch('/api/fortune-v2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -54,9 +55,13 @@ export default function FortuneForm() {
       if (data.success) {
         setResult(data.data);
         setStep('result');
+      } else {
+        console.error('API Error:', data.error);
+        alert('测算失败: ' + (data.error || '未知错误'));
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('网络错误，请稍后重试');
     } finally {
       setLoading(false);
     }
@@ -113,9 +118,15 @@ export default function FortuneForm() {
           
           <button
             type="submit"
-            className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-light text-bg-primary font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-light text-bg-primary font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {formData.readingType === 'compatibility' ? (
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                AI 正在测算中...
+              </>
+            ) : formData.readingType === 'compatibility' ? (
               <>下一步 <ArrowRight className="w-5 h-5" /></>
             ) : (
               '开始测算'
@@ -143,13 +154,16 @@ export default function FortuneForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-light text-bg-primary font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-light text-bg-primary font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
-              <>AI 正在测算中... <Loader2 className="w-5 h-5 animate-spin" /></>
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                AI 正在测算中...
+              </>
             ) : (
-              '开始合盘测算'
-            )}
+                '开始合盘测算'
+              )}
           </button>
         </form>
       </div>
