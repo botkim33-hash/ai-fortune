@@ -81,13 +81,13 @@ export function calculateBaZiPrecise(
   hour: number
 ): BaZiResult {
   // 创建公历日期
-  const solar = Solar.fromYmdHms(year, month, day, hour >= 0 ? hour : 12, 0, 0);
+  const solar = Solar.fromYmd(year, month, day);
   
   // 转换为农历
   const lunar = solar.getLunar();
   
-  // 获取八字
-  const bazi = lunar.getEightChar();
+  // 获取八字 (使用类型断言)
+  const bazi = (lunar as any).getEightChar();
   
   return {
     year: {
@@ -390,7 +390,7 @@ export function calculateDaYunPrecise(
   hour: number,
   gender: 'male' | 'female'
 ): DaYunItem[] {
-  const solar = Solar.fromYmdHms(year, month, day, hour >= 0 ? hour : 12, 0, 0);
+  const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
   const bazi = lunar.getEightChar();
   
@@ -430,7 +430,7 @@ export function getQiYunAge(
   hour: number,
   gender: 'male' | 'female'
 ): { startAge: number; startYear: number; direction: string } {
-  const solar = Solar.fromYmdHms(year, month, day, hour >= 0 ? hour : 12, 0, 0);
+  const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
   const bazi = lunar.getEightChar();
   
@@ -458,7 +458,7 @@ export function getShenShaPrecise(
   day: number,
   hour: number
 ): ShenShaResult[] {
-  const solar = Solar.fromYmdHms(year, month, day, hour >= 0 ? hour : 12, 0, 0);
+  const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
   const bazi = lunar.getEightChar();
   
@@ -592,7 +592,7 @@ export function getNaYin(year: number, month: number, day: number, hour: number)
   day: string;
   hour: string;
 } {
-  const solar = Solar.fromYmdHms(year, month, day, hour >= 0 ? hour : 12, 0, 0);
+  const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
   const bazi = lunar.getEightChar();
   
@@ -614,7 +614,7 @@ export function getLiuNian(year: number, month: number, day: number, hour: numbe
   shiShen: string;
   relationToDayMaster: string;
 } {
-  const solar = Solar.fromYmdHms(year, month, day, hour >= 0 ? hour : 12, 0, 0);
+  const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
   const bazi = lunar.getEightChar();
   const dayGan = bazi.getDayGan();
