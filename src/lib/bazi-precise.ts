@@ -408,8 +408,8 @@ export function calculateDaYunPrecise(
     const zhi = ganZhi.substring(1, 2);
     
     result.push({
-      startAge: dy.getStartAge(),
-      endAge: dy.getEndAge(),
+      startAge: (dy as any).getStartAge(),
+      endAge: (dy as any).getEndAge(),
       gan,
       zhi,
       element: WUXING_MAP[gan],
@@ -443,8 +443,8 @@ export function getQiYunAge(
   const isForward = (gender === 'male' && isYang) || (gender === 'female' && !isYang);
   
   return {
-    startAge: yun.getStartAge(),
-    startYear: yun.getStartYear(),
+    startAge: (yun as any).getStartAge(),
+    startYear: (yun as any).getStartYear(),
     direction: isForward ? '顺行' : '逆行'
   };
 }
