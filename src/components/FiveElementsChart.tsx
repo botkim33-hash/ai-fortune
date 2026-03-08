@@ -1,7 +1,5 @@
 'use client';
 
-import { WUXING_COLORS } from '@/lib/constants';
-
 interface FiveElementsChartProps {
   elements: Record<string, number>;
   counts?: Record<string, number>;
