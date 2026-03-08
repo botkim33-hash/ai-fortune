@@ -403,9 +403,10 @@ export function calculateDaYunPrecise(
   
   for (let i = 0; i < Math.min(12, daYunList.length); i++) {
     const dy = daYunList[i];
-    const ganZhi = dy.getGanZhi();
-    const gan = ganZhi.substring(0, 1);
-    const zhi = ganZhi.substring(1, 2);
+    // 使用内部 lunar 对象获取干支（getGanZhi() 返回空字符串）
+    const lunarObj = (dy as any)._p.lunar;
+    const gan = lunarObj.getYearGan();
+    const zhi = lunarObj.getYearZhi();
     
     result.push({
       startAge: (dy as any).getStartAge(),
