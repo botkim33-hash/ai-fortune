@@ -392,7 +392,7 @@ export function calculateDaYunPrecise(
 ): DaYunItem[] {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
-  const bazi = lunar.getEightChar();
+  const bazi = (lunar as any).getEightChar();
   
   // 获取大运 (1=男, 0=女)
   const yun = bazi.getYun(gender === 'male' ? 1 : 0);
@@ -432,7 +432,7 @@ export function getQiYunAge(
 ): { startAge: number; startYear: number; direction: string } {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
-  const bazi = lunar.getEightChar();
+  const bazi = (lunar as any).getEightChar();
   
   // 获取大运
   const yun = bazi.getYun(gender === 'male' ? 1 : 0);
@@ -460,7 +460,7 @@ export function getShenShaPrecise(
 ): ShenShaResult[] {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
-  const bazi = lunar.getEightChar();
+  const bazi = (lunar as any).getEightChar();
   
   const shenSha: ShenShaResult[] = [];
   const positions = ['年柱', '月柱', '日柱', '时柱'];
@@ -594,7 +594,7 @@ export function getNaYin(year: number, month: number, day: number, hour: number)
 } {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
-  const bazi = lunar.getEightChar();
+  const bazi = (lunar as any).getEightChar();
   
   return {
     year: bazi.getYearNaYin(),
@@ -616,11 +616,11 @@ export function getLiuNian(year: number, month: number, day: number, hour: numbe
 } {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
-  const bazi = lunar.getEightChar();
+  const bazi = (lunar as any).getEightChar();
   const dayGan = bazi.getDayGan();
   
   // 计算流年
-  const liuNianGanZhi = Lunar.fromYmd(targetYear, 1, 1).getEightChar().getYearGanZhi();
+  const liuNianGanZhi = (Lunar.fromYmd(targetYear, 1, 1) as any).getEightChar().getYearGanZhi();
   const gan = liuNianGanZhi.substring(0, 1);
   const zhi = liuNianGanZhi.substring(1, 2);
   
