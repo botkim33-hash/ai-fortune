@@ -701,5 +701,4 @@ function getLiuNianRelation(bazi: any, gan: string, zhi: string): string {
   return relation;
 }
 
-// 导出所有数据
-export { TIAN_GAN, DI_ZHI, WUXING_MAP, YINYANG_MAP };
+// 数据已在文件开头导出
