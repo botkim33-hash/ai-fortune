@@ -18,6 +18,7 @@ export default function FortuneForm() {
       hour: 12,
       minute: 0,
       gender: 'male',
+      calendarType: 'solar', // 默认公历
     },
   });
   const [loading, setLoading] = useState(false);
@@ -147,7 +148,7 @@ export default function FortuneForm() {
         
         <form onSubmit={handlePerson2Submit} className="glass rounded-2xl p-8">
           <BirthForm
-            data={formData.person2 || { year: 1995, month: 6, day: 15, hour: 12, minute: 0, gender: 'female' }}
+            data={formData.person2 || { year: 1995, month: 6, day: 15, hour: 12, minute: 0, gender: 'female', calendarType: 'solar' }}
             onChange={(data) => setFormData(prev => ({ ...prev, person2: data }))}
           />
           
@@ -249,7 +250,45 @@ function BirthForm({
 
       {/* 出生日期 */}
       <div>
-        <label className="block text-sm text-text-secondary mb-2">出生日期（公历）</label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm text-text-secondary">出生日期</label>
+          <div className="flex items-center gap-2 bg-[#1a1a25] rounded-lg p-1">
+            {[
+              { value: 'solar', label: '公历' },
+              { value: 'lunar', label: '农历' },
+            ].map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onChange({ ...data, calendarType: value as 'solar' | 'lunar' })}
+                className={`px-3 py-1 rounded-md text-sm transition-all ${
+                  data.calendarType === value || (value === 'solar' && !data.calendarType)
+                    ? 'bg-gold text-bg-primary font-medium'
+                    : 'text-text-secondary hover:text-white'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        {/* 历法提示 */}
+        <div className="mb-3 p-2 rounded-lg bg-[#1a1a25] border border-[rgba(212,175,55,0.1)]">
+          <p className="text-xs text-text-muted">
+            {data.calendarType === 'lunar' ? (
+              <>
+                <span className="text-gold">农历示例：</span>1990年四月廿一（农历）
+              </>
+            ) : (
+              <>
+                <span className="text-gold">公历示例：</span>1990年5月15日（公历）
+                <span className="ml-2 text-[#666]">中国大陆1996年后出生一般为公历</span>
+              </>
+            )}
+          </p>
+        </div>
+
         <div className="grid grid-cols-3 gap-3">
           <select
             value={data.year}

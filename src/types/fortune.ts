@@ -9,6 +9,7 @@ export interface BaZiInput {
   gender: 'male' | 'female';
   name?: string; // 可选的名字
   birthPlace?: string; // 出生地（用于真太阳时校正）
+  calendarType?: 'solar' | 'lunar'; // 历法类型：公历/农历
 }
 
 export interface BaZiResult {

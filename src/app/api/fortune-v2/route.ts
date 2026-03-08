@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Solar, Lunar } from 'lunar-javascript';
 import { 
   calculateBaZiPrecise,
   calculateFullShiShen,
@@ -36,6 +37,35 @@ const ZHI_CANG_GAN: Record<string, string[]> = {
   '亥': ['壬', '甲']
 };
 
+/**
+ * 转换出生日期为公历
+ * 如果输入是农历，先转换为公历
+ */
+function convertToSolarDate(person: any): { year: number; month: number; day: number; isLunar: boolean } {
+  const { year, month, day, calendarType } = person;
+  
+  // 默认公历
+  if (!calendarType || calendarType === 'solar') {
+    return { year, month, day, isLunar: false };
+  }
+  
+  // 农历转公历
+  try {
+    const lunar = Lunar.fromYmd(year, month, day);
+    const solar = lunar.getSolar();
+    return {
+      year: solar.getYear(),
+      month: solar.getMonth(),
+      day: solar.getDay(),
+      isLunar: true
+    };
+  } catch (error) {
+    console.error('农历转公历失败:', error);
+    // 转换失败时返回原日期
+    return { year, month, day, isLunar: true };
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -48,13 +78,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 转换日期为公历（如果是农历）
+    const solarDate1 = convertToSolarDate(person1);
+    const birthDateInfo1 = solarDate1.isLunar 
+      ? `（农历${person1.year}年${person1.month}月${person1.day}日转换为公历${solarDate1.year}年${solarDate1.month}月${solarDate1.day}日）`
+      : '';
+
     const hour = person1.hour >= 0 ? person1.hour : 12;
     
-    // 使用精确的八字算法计算
+    // 使用精确的八字算法计算（使用转换后的公历日期）
     const bazi = calculateBaZiPrecise(
-      person1.year,
-      person1.month,
-      person1.day,
+      solarDate1.year,
+      solarDate1.month,
+      solarDate1.day,
       hour
     );
 
