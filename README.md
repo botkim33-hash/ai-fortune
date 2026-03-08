@@ -34,3 +34,4 @@ npm run dev
 ```bash
 vercel --prod
 ```
+# Deployment verified
